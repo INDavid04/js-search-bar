@@ -1,3 +1,5 @@
+/* Initial code */
+
 const resultsContainer = document.getElementById('resultsContainer');
 const searchInput = document.getElementById('searchInput');
 const searchButton = document.getElementById('searchButton');
@@ -32,6 +34,47 @@ resultsContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-btn')) {
         event.target.parentElement.remove();
     }
+});
+
+/* Add an element from website */
+
+const resultsContainer = document.getElementById('resultsContainer');
+const searchInput = document.getElementById('searchInput');
+const searchButton = document.getElementById('searchButton');
+
+searchButton.addEventListener('click', () => {
+    const url = searchInput.value.trim();
+
+    if (url === '') {
+        alert('Please enter a URL.');
+        return;
+    }
+
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const title = doc.querySelector('title').textContent;
+
+            const article = document.createElement('article');
+            const h2 = document.createElement('h2');
+            h2.textContent = title;
+            article.appendChild(h2);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'Chords';
+            contentDiv.innerHTML = doc.body.innerHTML;
+            article.appendChild(contentDiv);
+
+            resultsContainer.appendChild(article);
+        })
+        .catch(error => {
+            console.error('Error fetching content:', error);
+            alert('Failed to fetch content. Please check the URL.');
+        });
+
+    searchInput.value = '';
 });
 
 /*
