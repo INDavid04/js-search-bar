@@ -1,3 +1,42 @@
+const resultsContainer = document.getElementById('resultsContainer');
+const searchInput = document.getElementById('searchInput');
+const searchButton = document.getElementById('searchButton');
+
+searchButton.addEventListener('click', () => {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+
+    if (searchTerm === '') {
+        alert('Please enter a search term.');
+        return;
+    }
+
+    const articleSections = document.querySelectorAll('article');
+
+    let found = false;
+    articleSections.forEach(article => {
+        const articleContent = article.textContent.toLowerCase();
+        if (articleContent.includes(searchTerm)) {
+            found = true;
+            resultsContainer.appendChild(article.cloneNode(true));
+        }
+    });
+
+    if (!found) {
+        alert('No results found.');
+    }
+
+    searchInput.value = '';
+});
+
+resultsContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('delete-btn')) {
+        event.target.parentElement.remove();
+    }
+});
+
+/*
+From webdevsimplified
+
 const userCardTemplate = document.querySelector("[data-user-template]")
 const userCardContainer = document.querySelector("[data-user-cards-container]")
 const searchInput = document.querySelector("[data-search]")
@@ -27,3 +66,4 @@ fetch("https://jsonplaceholder.typicode.com/users")
       return { name: user.name, email: user.email, element: card }
     })
   })
+*/
